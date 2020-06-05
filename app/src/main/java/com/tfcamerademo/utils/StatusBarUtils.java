@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.RequiresApi;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -24,6 +26,7 @@ public class StatusBarUtils {
      * 开启沉浸式状态栏
      *
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static void openImmerseStatasBarMode(Activity activity) {
         try {
             Window window = activity.getWindow();

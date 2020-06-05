@@ -1,4 +1,4 @@
-package com.example.android.tflitecamerademo.utils;
+package com.tfcamerademo.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

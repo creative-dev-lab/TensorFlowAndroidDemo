@@ -1,4 +1,4 @@
-package com.example.android.tflitecamerademo.utils;/**
+package com.tfcamerademo.utils;/**
  * Created by 30884 on 2017/10/17.
  */
 
