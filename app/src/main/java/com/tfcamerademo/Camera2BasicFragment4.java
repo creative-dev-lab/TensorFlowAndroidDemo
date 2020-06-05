@@ -18,10 +18,7 @@ package com.tfcamerademo;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
@@ -50,11 +47,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v13.app.FragmentCompat;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Size;
 import android.view.LayoutInflater;
@@ -65,6 +57,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.tfcamerademo.model.TensorFlowObjectDetectionAPIModel;
 import com.tfcamerademo.view.AutoFitTextureView;
@@ -86,8 +86,9 @@ import java.util.concurrent.TimeUnit;
  * 如果是检测出前面的车辆中心点在横屏8分之2到8分之6的范围内则判断中心点居上距离大于一定范围则算前车过近
  *          或者如果车的高度大于一定级别则算前车过近
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class Camera2BasicFragment4 extends Fragment
-        implements FragmentCompat.OnRequestPermissionsResultCallback {
+        implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     /**
      * Tag for the {@link Log}.
@@ -405,7 +406,7 @@ public class Camera2BasicFragment4 extends Fragment
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onPause() {
         closeCamera();
@@ -549,14 +550,14 @@ public class Camera2BasicFragment4 extends Fragment
     }
 
     /**
-     * Opens the camera specified by {@link Camera2BasicFragment#cameraId}.
+     * Opens the camera specified by {@link Camera2BasicFragment}.
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void openCamera(int width, int height) {
 
         Log.e("ccccccc", width + "   " + height);
         if (!checkedPermissions && !allPermissionsGranted()) {
-            FragmentCompat.requestPermissions(this, getRequiredPermissions(), PERMISSIONS_REQUEST_CODE);
+            ActivityCompat.requestPermissions(getActivity(), getRequiredPermissions(), PERMISSIONS_REQUEST_CODE);
             return;
         } else {
             checkedPermissions = true;
@@ -647,7 +648,7 @@ public class Camera2BasicFragment4 extends Fragment
     /**
      * 停止后台线程
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void stopBackgroundThread() {
         backgroundThread.quitSafely();
         try {

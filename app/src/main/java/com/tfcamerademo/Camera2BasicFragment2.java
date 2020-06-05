@@ -20,15 +20,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -48,11 +45,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v13.app.FragmentCompat;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Size;
 import android.view.LayoutInflater;
@@ -63,6 +55,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.tfcamerademo.model.TensorFlowImageClassifier2;
 import com.tfcamerademo.view.AutoFitTextureView;
@@ -75,11 +73,14 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import static androidx.core.content.ContextCompat.checkSelfPermission;
+
 /**
  *  用来跑道路识别
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class Camera2BasicFragment2 extends Fragment
-        implements FragmentCompat.OnRequestPermissionsResultCallback {
+        implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     /**
      * Tag for the {@link Log}.
@@ -415,7 +416,7 @@ public class Camera2BasicFragment2 extends Fragment
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onPause() {
         closeCamera();
@@ -566,7 +567,7 @@ public class Camera2BasicFragment2 extends Fragment
 
         Log.e("ccccccc", width + "   " + height);
         if (!checkedPermissions && !allPermissionsGranted()) {
-            FragmentCompat.requestPermissions(this, getRequiredPermissions(), PERMISSIONS_REQUEST_CODE);
+            ActivityCompat.requestPermissions(getActivity(), getRequiredPermissions(), PERMISSIONS_REQUEST_CODE);
             return;
         } else {
             checkedPermissions = true;
@@ -581,7 +582,7 @@ public class Camera2BasicFragment2 extends Fragment
             if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw new RuntimeException("Time out waiting to lock camera opening.");
             }
-            if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (checkSelfPermission(this.getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -601,7 +602,7 @@ public class Camera2BasicFragment2 extends Fragment
 
     private boolean allPermissionsGranted() {
         for (String permission : getRequiredPermissions()) {
-            if (ContextCompat.checkSelfPermission(getActivity(), permission)
+            if (checkSelfPermission(getActivity(), permission)
                     != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
@@ -657,7 +658,7 @@ public class Camera2BasicFragment2 extends Fragment
     /**
      * Stops the background thread and its {@link Handler}.
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void stopBackgroundThread() {
         backgroundThread.quitSafely();
         try {

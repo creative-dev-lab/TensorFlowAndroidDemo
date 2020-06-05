@@ -15,9 +15,12 @@ limitations under the License.
 
 package com.tfcamerademo.activity;
 
-import android.app.Activity;
-import android.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.tfcamerademo.Camera2BasicFragment;
 import com.tfcamerademo.Camera2BasicFragment2;
@@ -28,30 +31,32 @@ import com.tfcamerademo.R;
 /**
  * Main {@code Activity} class for the Camera app.
  */
-public class CameraActivity extends Activity {
+public class CameraActivity extends FragmentActivity {
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         if (null == savedInstanceState) {
             int flag = getIntent().getIntExtra("Flag", 1);
-            Fragment fragment = null;
-            switch (flag) {
-                case 1:
-                    fragment = Camera2BasicFragment.newInstance();
-                    break;
-                case 2:
-                    fragment = Camera2BasicFragment2.newInstance();
-                    break;
-                case 3:
-                    fragment = Camera2BasicFragment3.newInstance();
-                    break;
-                case 4:
-                    fragment = Camera2BasicFragment4.newInstance();
-                    break;
-            }
-            getFragmentManager()
+//            Fragment fragment = null;
+//            switch (flag) {
+//                case 1:
+//                    fragment = Camera2BasicFragment.newInstance();
+//                    break;
+//                case 2:
+//                    fragment = Camera2BasicFragment2.newInstance();
+//                    break;
+//                case 3:
+//                    fragment = Camera2BasicFragment3.newInstance();
+//                    break;
+//                case 4:
+//                    fragment = Camera2BasicFragment4.newInstance();
+//                    break;
+//            }
+            Fragment fragment = Camera2BasicFragment.newInstance();
+            getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit();

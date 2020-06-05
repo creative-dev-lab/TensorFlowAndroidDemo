@@ -18,10 +18,7 @@ package com.tfcamerademo;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
@@ -50,11 +47,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v13.app.FragmentCompat;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Size;
 import android.view.LayoutInflater;
@@ -65,6 +57,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.tfcamerademo.model.TensorFlowObjectDetectionAPIModel;
 import com.tfcamerademo.view.AutoFitTextureView;
@@ -81,8 +81,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * 本识别是专门用来识别抽烟、打电话、睁眼、闭眼的
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class Camera2BasicFragment extends Fragment
-        implements FragmentCompat.OnRequestPermissionsResultCallback {
+        implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     /**
      * Tag for the {@link Log}.
@@ -106,7 +107,7 @@ public class Camera2BasicFragment extends Fragment
     private static final String TF_OD_API_MODEL_FILE = "file:///android_asset/frozen_inference_graph_v6.pb";
     private static final String TF_OD_API_LABELS_FILE = "file:///android_asset/coco_labels_list.txt";
     private static final int TF_OD_API_INPUT_SIZE = 300;
-    private static final float MINIMUM_CONFIDENCE_TF_OD_API = 0.6f;
+    private static final float MINIMUM_CONFIDENCE_TF_OD_API = 0.2f;
 
     private static float canvasWidth = 100;
     private static float canvasHeight = 100;
@@ -152,7 +153,7 @@ public class Camera2BasicFragment extends Fragment
     /**
      * ID of the current {@link CameraDevice}.
      */
-    private String cameraId = "0";
+    private String cameraId = "1";
 
     /**
      * An {@link AutoFitTextureView} for camera preview.
@@ -399,7 +400,7 @@ public class Camera2BasicFragment extends Fragment
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onPause() {
         closeCamera();
@@ -511,7 +512,7 @@ public class Camera2BasicFragment extends Fragment
                 }
 
                 //修改摄像头方向  0后置摄像头  1前置摄像头
-                this.cameraId = "1";
+                this.cameraId = "0";
                 return;
             }
         } catch (CameraAccessException e) {
@@ -550,7 +551,7 @@ public class Camera2BasicFragment extends Fragment
 
         Log.e("ccccccc", width + "   " + height);
         if (!checkedPermissions && !allPermissionsGranted()) {
-            FragmentCompat.requestPermissions(this, getRequiredPermissions(), PERMISSIONS_REQUEST_CODE);
+            ActivityCompat.requestPermissions(getActivity(), getRequiredPermissions(), PERMISSIONS_REQUEST_CODE);
             return;
         } else {
             checkedPermissions = true;
@@ -641,7 +642,7 @@ public class Camera2BasicFragment extends Fragment
     /**
      * 停止后台线程
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void stopBackgroundThread() {
         backgroundThread.quitSafely();
         try {

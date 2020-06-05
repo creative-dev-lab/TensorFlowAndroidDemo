@@ -1,5 +1,6 @@
 package com.tfcamerademo.activity;
 
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,19 +8,17 @@ import android.view.View;
 
 import com.tfcamerademo.R;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        findViewById(R.id.faceBtn).setOnClickListener(this);
-//        findViewById(R.id.roadBtn).setOnClickListener(this);
-//        findViewById(R.id.bodyBtn).setOnClickListener(this);
-//        findViewById(R.id.carAndLineBtn).setOnClickListener(this);
-
-
+        findViewById(R.id.faceBtn).setOnClickListener(this);
+        findViewById(R.id.roadBtn).setOnClickListener(this);
+        findViewById(R.id.bodyBtn).setOnClickListener(this);
+        findViewById(R.id.carAndLineBtn).setOnClickListener(this);
     }
 
     public void onClick(View v) {

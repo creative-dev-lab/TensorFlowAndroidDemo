@@ -1,4 +1,4 @@
-package com.example.android.tflitecamerademo.utils;
+package com.tfcamerademo.utils;
 
 import android.util.Log;
 import android.view.View;
